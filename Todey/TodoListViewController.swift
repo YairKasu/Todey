@@ -14,13 +14,19 @@ class TodoListViewController: UITableViewController{
     
     var itemArray = ["Find Mike", "Buy Eggos", "Demogorgon"]
     
+    let defaults = UserDefaults.standard
+    
+    //MARK: - View Did Load 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
 
-    //MARK: - DataSource Methodes
+    //MARK: - TableView DataSource Methodes
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return itemArray.count
@@ -49,6 +55,8 @@ class TodoListViewController: UITableViewController{
         tableView.deselectRow(at:indexPath, animated: true)
     }
     
+    //MARK: - add item Button
+    
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var textField = UITextField()
@@ -59,6 +67,8 @@ class TodoListViewController: UITableViewController{
             //what will happend once the user clicks the add item button on our Alert
             
             self.itemArray.append(textField.text!)
+        
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
             
             self.tableView.reloadData()
         }
